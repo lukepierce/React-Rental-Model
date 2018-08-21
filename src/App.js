@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import store from  './store.js';
-
 import logo from './logo.svg';
 import './App.css';
 import store from './store.js'
@@ -86,7 +84,7 @@ class InputPage extends React.Component {
 */
 @connect((store) => {
   return {
-    inputData: store.form
+    inputData: store.inputData
   };
 })
 class CashFlow extends React.Component {
@@ -103,7 +101,7 @@ class CashFlow extends React.Component {
   render() {
     return(
       <div className="cashFlow">
-
+          <div><p>{this.props.inputData.nYears}</p></div>
           Calculation: <input type="text" name="calc"/>
           <button onClick={this.handleClick.bind(this)}>
             Activate Lasers
@@ -115,7 +113,7 @@ class CashFlow extends React.Component {
 
 @connect((store) => {
   return {
-    inputData: store.form
+    inData: store.output
   };
 })
 class MoneyData extends React.Component {
@@ -126,22 +124,28 @@ class MoneyData extends React.Component {
   }
 
   render() {
-    return (
-      <Plot
-        data={[
-          {
-            x: [1, 2, 3],
-            y: [2, 6, 3],
-            type: 'scatter',
-            mode: 'lines+points',
-            marker: {color: 'red'},
-          },
-          {type: 'bar', x: [1, 2, 3], y: [2, 5, 3]},
-        ]}
-        layout={ {width: 320, height: 240, title: 'A Fancy Plot'} }
-      />
-    );
+    if(this.props.inData.years.length > 0) {
+      return (
+        <Plot
+          data={[
+            {
+              x: this.props.inData.years,
+              y: this.props.inData.netWorth,
+              type: 'scatter',
+              mode: 'lines+points',
+              marker: {color: 'red'},
+            }
+          ]}
+          layout={ {width: 320, height: 240, title: 'A Fancy Plot'} }
+        />
+      );
+    } else {
+      return(
+        <div>Empty Render</div>
+      );
+    }
   }
+    
 }
 
 export default App;
